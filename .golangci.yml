@@ -1,30 +1,33 @@
 linters:
-  # Disable all linters.
-  # Default: false
+  # Disable all linters (default: false).
   disable-all: true
-  # Enable specific linter
+  
+  # Enable specific linters from the list of default linters.
   # https://golangci-lint.run/usage/linters/#enabled-by-default-linters
   enable:
-  # default linters
-    - errcheck
-    - gosimple
-    - govet
-    - ineffassign
-    - staticcheck
-    - typecheck
-    - unused
+    # Default linters that are usually useful
+    - errcheck        # Checks for unchecked errors
+    - gosimple        # Detects code simplifications
+    - govet           # Vet for Go code issues
+    - ineffassign     # Detects assignments to variables that are never used
+    - staticcheck     # Performs static analysis to catch bugs, dead code, etc.
+    - typecheck       # Checks for incorrect type usage
+    - unused          # Detects unused variables, imports, etc.
 
-  # additional linters
-    - gosec
-    - forcetypeassert
-    # - contextcheck # disabled in CI for now because fixes to findings need additional work
-    - noctx
-    # - unconvert # disable because extra conversion typically don't hurt but can make code more clear
-    - unparam
-    - prealloc
+    # Additional linters
+    - gosec           # Security-related checks
+    - forcetypeassert # Detects unnecessary type assertions
+    # - contextcheck   # Disabled due to additional work required for fixes
+    - noctx           # Detects missing context in functions
+    # - unconvert      # Disabled as extra conversions do not harm and can make code clearer
+    - unparam         # Detects unused function parameters
+    - prealloc        # Detects slices that should be preallocated
+
 issues:
+  # Exclude specific issues for certain files or patterns
   exclude-rules:
     - path: pkg/supervisor/supervisor_testhelpers.go
+      # Exclude function signatures with names like waitSettle or waitSettleError in supervisor_testhelpers.go
       text: "^func.*supervisor.*(waitSettle|waitSettleError).*$"
       linters:
-        - unused
+        - unused  # Exclude 'unused' linter for these functions
